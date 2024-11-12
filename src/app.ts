@@ -10,34 +10,34 @@ config();
 const PORT = process.env.PORT ?? 3008;
 
 // Definición de flujos
-const ingresoflow = addKeyword("1")
+const ingresoflow = addKeyword("ui3v")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("*PASO PARA INGRESAR A LA PLATAFORMA* ");
         await ctxFn.flowDynamic("(1) Hacer clic en la página de Paul Müller *https://idiomaspaulmuller.servidor-vps.space/login* ");
         await ctxFn.flowDynamic("(2) Colocar tu número de DNI \n\n *EJEMPLO*\n\n USUARIO = *00000(SU DNI)* \n\nCONTRASEÑA = *000000(SU DNI)*");
     });
 
-const horarioflow = addKeyword("2")
+const horarioflow = addKeyword("6QDX")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("Buen día, ¿a qué horario desea cambiarlo? Así puedo darle una fecha de inicio. 😊\n\n *Recuerde que el cambio de horario tiene un costo de S/.11.00 y se realiza después de tomar su examen final.*");
     });
 
-const justificacionflow = addKeyword("3")
+const justificacionflow = addKeyword("BxJG")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("Debe adquirir en caja una solicitud de justificación y presentarla a la oficina de Centro de Idiomas. Si la falta fue en día de examen, debe anexar un documento que valide la información para poder programar el examen sin costo.");
     });
 
-const libroflow = addKeyword("4")
+const libroflow = addKeyword("6x0a")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("¡Buen día! Si la *nota final* es mayor a 13, el alumno ha pasado de módulo y puede adquirir el siguiente libro en el área de caja de lunes a viernes de 9am a 7pm. 📚✅\n\nSi la nota es de 10 a 12, debe tomar un examen de recuperación. Con una nota de 0 a 9, el alumno repite automáticamente el módulo. 📝🔄");
     });
 
-const registroflow = addKeyword("5")
+const registroflow = addKeyword("KkAM")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
     });
 
-const examenflow = addKeyword("6")
+const examenflow = addKeyword("DPMX")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("El *examen de recuperación* cuesta *S/. 21.00*. Puede pagarlo en caja y con la solicitud que le brinden, subir a la oficina de Centro de Idiomas para programar la fecha de su examen (de martes a viernes de 10am a 6pm). 😊");
     });
@@ -60,12 +60,12 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                         {
                             "title": "PREGUNTAS FRECUENTES",
                             "rows": [
-                                { "id": "1", "title": "Ingreso", "description": "Plataforma de acceso" },
-                                { "id": "2", "title": "Horario", "description": "Cambio de horario" },
-                                { "id": "3", "title": "Justificación", "description": "Solicitar justificación" },
-                                { "id": "4", "title": "Libro", "description": "Adquirir el libro" },
-                                { "id": "5", "title": "Registro", "description": "No registrado en la plataforma" },
-                                { "id": "6", "title": "Recuperación", "description": "Examen de recuperación" }
+                                { "id": "ui3v", "title": "Ingreso", "description": "Plataforma de acceso" },
+                                { "id": "6QDX", "title": "Horario", "description": "Cambio de horario" },
+                                { "id": "BxJG", "title": "Justificación", "description": "Solicitar justificación" },
+                                { "id": "6x0a", "title": "Libro", "description": "Adquirir el libro" },
+                                { "id": "KkAM", "title": "Registro", "description": "No registrado en la plataforma" },
+                                { "id": "DPMX", "title": "Recuperación", "description": "Examen de recuperación" }
                             ]
                         }
                     ]
