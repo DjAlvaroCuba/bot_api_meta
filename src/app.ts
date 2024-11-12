@@ -43,6 +43,7 @@ const examenflow = addKeyword("DPMX")
     });
 
 const defaultFlow = addKeyword('')
+    .addAnswer("Gracias por comunicarte conmigo")
     .addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
 
 const welcomeFlow = addKeyword(["hola", "opciones"])
