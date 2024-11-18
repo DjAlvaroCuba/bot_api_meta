@@ -41,6 +41,10 @@ const examenflow = addKeyword("DPMX")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("El *examen de recuperación* cuesta *S/. 21.00*. Puede pagarlo en caja y con la solicitud que le brinden, subir a la oficina de Centro de Idiomas para programar la fecha de su examen (de martes a viernes de 10am a 6pm). 😊");
     });
+const justificacion_faltaflow = addKeyword("AKSD")
+    .addAction(async (ctx, ctxFn) => {
+        await ctxFn.flowDynamic("Debe adquirir en caja una solicitud de justificación y presentarla a la oficina de centro de idiomas, Si la falta fue día de examen debe anexar un documento que valide la información para poder programar el examen sin ningún costo ");
+    });
 
 const defaultFlow = addKeyword('')
     .addAnswer("Gracias por comunicarte conmigo")
@@ -66,7 +70,9 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                                 { "id": "BxJG", "title": "Justificación", "description": "Solicitar justificación" },
                                 { "id": "6x0a", "title": "Libro", "description": "Adquirir el libro" },
                                 { "id": "KkAM", "title": "Registro", "description": "No registrado en la plataforma" },
-                                { "id": "DPMX", "title": "Recuperación", "description": "Examen de recuperación" }
+                                { "id": "DPMX", "title": "Recuperación", "description": "Examen de recuperación" },
+                                { "id": "AKSD", "title": "Justificacion", "description": "Justificaion de falta" }
+                                
                             ]
                         }
                     ]
@@ -77,7 +83,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow, defaultFlow]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow, defaultFlow,justificacion_faltaflow]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
