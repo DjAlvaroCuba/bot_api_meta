@@ -83,7 +83,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow, defaultFlow,justificacion_faltaflow]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow,justificacion_faltaflow, defaultFlow]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
