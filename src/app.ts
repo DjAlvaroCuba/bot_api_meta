@@ -98,14 +98,25 @@ const main = async () => {
         database: adapterDB,
     });
 
-    adapterProvider.server.post(
-        '/v1/messages',
-        handleCtx(async (bot, req, res) => {
-            const { number, message, urlMedia } = req.body;
-            await bot.sendMessage(number, message, { media: urlMedia ?? null });
-            return res.end('sended');
-        })
-    );
+   adapterProvider.server.post(
+    '/v1/messages',
+    handleCtx(async (bot, req, res) => {
+        const { number, message, urlMedia } = req.body;
+
+        // Capturar número y mensaje en consola
+        console.log(`Nuevo mensaje recibido:`);
+        console.log(`Número: ${number}`);
+        console.log(`Mensaje: ${message}`);
+        
+        if (urlMedia) {
+            console.log(`Media URL: ${urlMedia}`);
+        }
+
+        // Enviar respuesta (opcional)
+        await bot.sendMessage(number, '¡Gracias por tu mensaje! Estamos procesándolo.');
+        return res.end('sended');
+    })
+);
 
     adapterProvider.server.post(
         '/v1/register',
