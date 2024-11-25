@@ -49,6 +49,16 @@ const justificacion_faltaflow = addKeyword("AKSD")
 const defaultFlow = addKeyword('')
     .addAnswer("Gracias por comunicarte conmigo")
     .addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
+const preguntaflow = addKeyword("ÑPOK")
+    .addAnswer("nombre",{capture:true},
+        async (ctx ,ctxFn) => {
+            await ctxFn.flowDynamic("Prefecto"+ ctx.body + "...")
+            await ctxFn.state.update({"name": ctx.body})
+            console.log(ctx)
+            console.log(ctxFn)
+            console.log(ctx.body)
+        }
+    )
 
 const welcomeFlow = addKeyword(["hola", "opciones"])
     .addAnswer(
@@ -71,7 +81,8 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                                 { "id": "6x0a", "title": "Libro", "description": "Adquirir el libro" },
                                 { "id": "KkAM", "title": "Registro", "description": "No registrado en la plataforma" },
                                 { "id": "DPMX", "title": "Recuperación", "description": "Examen de recuperación" },
-                                { "id": "AKSD", "title": "Justificacion", "description": "Justificaion de falta" }
+                                { "id": "AKSD", "title": "Justificacion", "description": "Justificaion de falta" },
+                                { "id": "ÑPOK", "title": "Registro", "description": "Registro nombre" }
                                 
                             ]
                         }
@@ -83,7 +94,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow,justificacion_faltaflow, defaultFlow]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow,justificacion_faltaflow,preguntaflow, defaultFlow]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
