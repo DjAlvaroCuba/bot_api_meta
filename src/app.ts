@@ -52,11 +52,10 @@ const defaultFlow = addKeyword('')
 const preguntaflow = addKeyword("ÑPOK")
     .addAnswer("nombre",{capture:true},
         async (ctx ,ctxFn) => {
-            await ctxFn.flowDynamic("Prefecto"+ ctx.body + "...")
+            await ctxFn.flowDynamic("Prefecto: " + ctx.body + "...")
             await ctxFn.state.update({"name": ctx.body})
             console.log(ctx)
-            console.log(ctxFn)
-            console.log(ctx.body)
+            
         }
     )
 
