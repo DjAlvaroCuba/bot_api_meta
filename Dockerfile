@@ -45,7 +45,9 @@ ENV PNPM_HOME=/usr/local/bin
 
 # Instalar solo las dependencias de producción
 RUN npm cache clean --force && pnpm install --production --ignore-scripts \
-    && addgroup -g 1001 -S nodejs && adduser -S -u 1001 nodejs \
-    && rm -rf $PNPM_HOME/.npm $PNPM_HOME/.node-gyp
+    && addgroup -g 1001 -S nodejs \
+    && adduser -S nodejs -G nodejs \
+    && rm -rf /usr/local/bin/.npm /usr/local/bin/.node-gyp
+
 
 CMD ["npm", "start"]
