@@ -70,17 +70,17 @@ const sheetprueba = addKeyword("KkAM")
         })
     .addAnswer("nombre",{capture: true},
         async(ctx, ctxFn) => {
-            await ctxFn.flowDynamic("Perfecto" + ctx.body )
+            await ctxFn.flowDynamic("Bienvenido a Muller : " + ctx.body )
             await ctxFn.state.update({"name":ctx.body})
             console.log(ctxFn.state.get("name"))
         }
     )
     .addAnswer("email", { capture: true },
         async (ctx, ctxFn) => {
-            await ctxFn.flowDynamic("Perfecto" + ctx.body )
+            await ctxFn.flowDynamic("Perfecto , su correo es : " + ctx.body )
             await ctxFn.state.update({"email":ctx.body})
             console.log(ctxFn.state.get("email"))
-        }
+        }   
     );
 //prueba-final sheet
 
