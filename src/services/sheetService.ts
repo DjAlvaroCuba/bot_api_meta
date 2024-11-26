@@ -10,15 +10,22 @@ class SheetManager {
     private spreadsheetId: string;
 
     constructor() {
-        // Usa la variable de entorno para el ID de la hoja
+        const privateKey = process.env.privateKey;
+        const clientEmail = process.env.clientEmail;
         const spreadsheetId = process.env.spreadsheetId;
 
-        if (!spreadsheetId) {
-            throw new Error("Falta la variable de entorno requerida: SPREADSHEET_ID.");
+        if (!privateKey || !clientEmail || !spreadsheetId) {
+            throw new Error("Faltan las variables de entorno requeridas: PRIVATE_KEY, CLIENT_EMAIL o SPREADSHEET_ID.");
         }
 
-        // Usamos google.sheets directamente sin autenticación, solo lectura pública
-        this.sheets = google.sheets({ version: "v4" });
+        const auth = new google.auth.JWT(
+            clientEmail, // Correo de la cuenta de servicio
+            null, // No necesitas el archivo de clave privada directamente, ya que lo has cargado en el entorno
+            privateKey, // Clave privada
+            ["https://www.googleapis.com/auth/spreadsheets"] // Permisos de acceso
+        );
+
+        this.sheets = google.sheets({ version: "v4", auth });
         this.spreadsheetId = spreadsheetId;
     }
 
@@ -26,7 +33,7 @@ class SheetManager {
         try {
             const result = await this.sheets.spreadsheets.values.get({
                 spreadsheetId: this.spreadsheetId,
-                range: "Users!A:A", // Asegúrate de que el rango sea el correcto
+                range: "Users!A:A",
             });
             const rows = result.data.values;
             if (rows) {
@@ -44,7 +51,7 @@ class SheetManager {
         try {
             await this.sheets.spreadsheets.values.append({
                 spreadsheetId: this.spreadsheetId,
-                range: "Users!A:C", // Asegúrate de que el rango sea el correcto
+                range: "Users!A:C",
                 valueInputOption: "RAW",
                 requestBody: {
                     values: [[number, name, mail]],
