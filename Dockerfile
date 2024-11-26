@@ -22,6 +22,8 @@ FROM node:21-alpine3.18 as deploy
 
 WORKDIR /app
 
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 ARG PORT
 ENV PORT $PORT
 EXPOSE $PORT
