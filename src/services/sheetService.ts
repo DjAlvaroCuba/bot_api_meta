@@ -10,24 +10,15 @@ class SheetManager {
     private spreadsheetId: string;
 
     constructor() {
-        // Usa las variables de entorno
-        const privateKey = process.env.privateKey;
-        const clientEmail = process.env.clientEmail;
+        // Usa la variable de entorno para el ID de la hoja
         const spreadsheetId = process.env.spreadsheetId;
 
-        if (!privateKey || !clientEmail || !spreadsheetId) {
-            throw new Error("Faltan variables de entorno requeridas: PRIVATE_KEY, CLIENT_EMAIL o SPREADSHEET_ID.");
+        if (!spreadsheetId) {
+            throw new Error("Falta la variable de entorno requerida: SPREADSHEET_ID.");
         }
 
-        const auth = new google.auth.GoogleAuth({
-            credentials: {
-                private_key: privateKey,
-                client_email: clientEmail,
-            },
-            scopes: ["https://www.googleapis.com/auth/spreadsheets"],
-        });
-
-        this.sheets = google.sheets({ version: "v4", auth });
+        // Usamos google.sheets directamente sin autenticación, solo lectura pública
+        this.sheets = google.sheets({ version: "v4" });
         this.spreadsheetId = spreadsheetId;
     }
 
@@ -35,7 +26,7 @@ class SheetManager {
         try {
             const result = await this.sheets.spreadsheets.values.get({
                 spreadsheetId: this.spreadsheetId,
-                range: "Users!A:A",
+                range: "Users!A:A", // Asegúrate de que el rango sea el correcto
             });
             const rows = result.data.values;
             if (rows) {
@@ -53,7 +44,7 @@ class SheetManager {
         try {
             await this.sheets.spreadsheets.values.append({
                 spreadsheetId: this.spreadsheetId,
-                range: "Users!A:C",
+                range: "Users!A:C", // Asegúrate de que el rango sea el correcto
                 valueInputOption: "RAW",
                 requestBody: {
                     values: [[number, name, mail]],
