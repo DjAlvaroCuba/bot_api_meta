@@ -1,5 +1,5 @@
 # Image size ~ 400MB
-FROM node:21-alpine3.18 as builder
+FROM node:21 as builder
 
 WORKDIR /app
 
