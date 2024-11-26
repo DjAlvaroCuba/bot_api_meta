@@ -1,8 +1,9 @@
-import { join } from 'path';
+
 import { config } from 'dotenv';
 import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
+import sheetService from './services/sheetService';
 
 // Cargar variables de entorno desde .env
 config();
@@ -32,7 +33,7 @@ const libroflow = addKeyword("6x0a")
         await ctxFn.flowDynamic("¡Buen día! Si la *nota final* es mayor a 13, el alumno ha pasado de módulo y puede adquirir el siguiente libro en el área de caja de lunes a viernes de 9am a 7pm. 📚✅\n\nSi la nota es de 10 a 12, debe tomar un examen de recuperación. Con una nota de 0 a 9, el alumno repite automáticamente el módulo. 📝🔄");
     });
 
-const registroflow = addKeyword("KkAM")
+const registroflow = addKeyword("sssss")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
     });
@@ -49,15 +50,46 @@ const justificacion_faltaflow = addKeyword("AKSD")
 const defaultFlow = addKeyword('')
     .addAnswer("Gracias por comunicarte conmigo")
     .addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
+    //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
 const preguntaflow = addKeyword("ÑPOK")
+        
     .addAnswer("nombre",{capture:true},
+        
         async (ctx ,ctxFn) => {
-            await ctxFn.flowDynamic("Prefecto: " + ctx.body + "...")
-            await ctxFn.state.update({"name": ctx.body})
-            console.log(ctx)
-            
+            await ctxFn.state.update({"name": ctx.body})   
         }
     )
+//prueba sheet
+const sheetprueba = addKeyword("KkAM")
+    .addAnswer("comenzamos con el registro ", {capture: true , buttons: [{body:"si"}, {body:"no"}]},
+        async(ctx,ctxFn) => {
+            if(ctx.body === "no"){
+                return ctxFn.endFlow("el registro fue cancelado")
+            } else if (ctx.body === "si"){
+                await ctxFn.flowDynamic("Perfecto, voy a proceder")
+            }else {
+                return ctxFn.fallBack("Elige una opcion")
+            }
+        })
+    .addAnswer("nombre",{capture: true},
+        async(ctx, ctxFn) => {
+            await ctxFn.flowDynamic("Perfecto" + ctx.body )
+            await ctxFn.state.update({"name":ctx.body})
+        }
+    )
+    .addAnswer("email", { capture: true },
+        async (ctx, ctxFn) => {
+            // Envía un mensaje dinámico al usuario
+            await ctxFn.flowDynamic("Perfecto, su correo: " + ctx.body);
+    
+            // Obtén el estado actual del flujo
+            const state = ctxFn.state.getMyState();
+    
+            // Llama al servicio para crear el usuario
+            await sheetService.createUser(ctx.from, state.name, ctx.body);
+        }
+    );
+//prueba-final sheet
 
 const welcomeFlow = addKeyword(["hola", "opciones"])
     .addAnswer(
@@ -93,7 +125,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow,justificacion_faltaflow,preguntaflow, defaultFlow]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba , defaultFlow]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,

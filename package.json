@@ -14,7 +14,8 @@
   "dependencies": {
     "@builderbot/bot": "1.2.2",
     "@builderbot/provider-meta": "1.2.2",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "googleapis": "^144.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.30",
