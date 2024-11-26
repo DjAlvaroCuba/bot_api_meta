@@ -33,10 +33,10 @@ const libroflow = addKeyword("6x0a")
         await ctxFn.flowDynamic("¡Buen día! Si la *nota final* es mayor a 13, el alumno ha pasado de módulo y puede adquirir el siguiente libro en el área de caja de lunes a viernes de 9am a 7pm. 📚✅\n\nSi la nota es de 10 a 12, debe tomar un examen de recuperación. Con una nota de 0 a 9, el alumno repite automáticamente el módulo. 📝🔄");
     });
 
-const registroflow = addKeyword("sssss")
-    .addAction(async (ctx, ctxFn) => {
-        await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
-    });
+//const registroflow = addKeyword("sssss")
+//   .addAction(async (ctx, ctxFn) => {
+//       await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
+//});
 
 const examenflow = addKeyword("DPMX")
     .addAction(async (ctx, ctxFn) => {
@@ -47,10 +47,6 @@ const justificacion_faltaflow = addKeyword("AKSD")
         await ctxFn.flowDynamic("Debe adquirir en caja una solicitud de justificación y presentarla a la oficina de centro de idiomas, Si la falta fue día de examen debe anexar un documento que valide la información para poder programar el examen sin ningún costo ");
     });
 
-const defaultFlow = addKeyword('')
-    .addAnswer("Gracias por comunicarte conmigo")
-    .addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
-    //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
 const preguntaflow = addKeyword("ÑPOK")
         
     .addAnswer("nombre",{capture:true},
@@ -61,35 +57,37 @@ const preguntaflow = addKeyword("ÑPOK")
     )
 //prueba sheet
 const sheetprueba = addKeyword("KkAM")
-    .addAnswer("comenzamos con el registro ", {capture: true , buttons: [{body:"si"}, {body:"no"}]},
+    .addAnswer("comenzamos con el registro, para ello te ire pidiendo datos. ", {capture: true , buttons: [{body:"si"}, {body:"no"}]},
         async(ctx,ctxFn) => {
             if(ctx.body === "no"){
                 return ctxFn.endFlow("el registro fue cancelado")
+    
             } else if (ctx.body === "si"){
                 await ctxFn.flowDynamic("Perfecto, voy a proceder")
             }else {
-                return ctxFn.fallBack("Elige una opcion")
+                return ctxFn.fallBack("Elige una opcion:")
             }
         })
     .addAnswer("nombre",{capture: true},
         async(ctx, ctxFn) => {
             await ctxFn.flowDynamic("Perfecto" + ctx.body )
             await ctxFn.state.update({"name":ctx.body})
+            console.log(ctxFn.state.get("name"))
         }
     )
     .addAnswer("email", { capture: true },
         async (ctx, ctxFn) => {
-            // Envía un mensaje dinámico al usuario
-            await ctxFn.flowDynamic("Perfecto, su correo: " + ctx.body);
-    
-            // Obtén el estado actual del flujo
-            const state = ctxFn.state.getMyState();
-    
-            // Llama al servicio para crear el usuario
-            await sheetService.createUser(ctx.from, state.name, ctx.body);
+            await ctxFn.flowDynamic("Perfecto" + ctx.body )
+            await ctxFn.state.update({"email":ctx.body})
+            console.log(ctxFn.state.get("email"))
         }
     );
 //prueba-final sheet
+
+const defaultFlow = addKeyword('')
+    .addAnswer("Gracias por comunicarte conmigo")
+    .addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
+    //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
 
 const welcomeFlow = addKeyword(["hola", "opciones"])
     .addAnswer(
@@ -125,7 +123,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, registroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba ]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow,  examenflow,justificacion_faltaflow,preguntaflow,sheetprueba,defaultFlow]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
