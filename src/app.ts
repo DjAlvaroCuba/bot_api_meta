@@ -84,9 +84,9 @@ const sheetprueba = addKeyword("KkAM")
     );
 //prueba-final sheet
 
-const defaultFlow = addKeyword('')
-    .addAnswer("Gracias por comunicarte conmigo")
-    .addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
+//const defaultFlow = addKeyword('')
+   // .addAnswer("Gracias por comunicarte conmigo")
+    //.addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
     //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
 
 const welcomeFlow = addKeyword(["hola", "opciones"])
@@ -123,7 +123,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow,  examenflow,justificacion_faltaflow,preguntaflow,sheetprueba,defaultFlow]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow,  examenflow,justificacion_faltaflow,preguntaflow,sheetprueba]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
