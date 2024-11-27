@@ -102,21 +102,37 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                 "action": {
                     "button": "OPCIONES",
                     "sections": [
-                        {
-                            "title": "PREGUNTAS FRECUENTES",
-                            "rows": [
-                                { "id": "ui3v", "title": "Ingreso", "description": "Plataforma de acceso" },
-                                { "id": "6QDX", "title": "Horario", "description": "Cambio de horario" },
-                                { "id": "BxJG", "title": "Justificación", "description": "Solicitar justificación" },
-                                { "id": "6x0a", "title": "Libro", "description": "Adquirir el libro" },
-                                { "id": "KkAM", "title": "Registro", "description": "No registrado en la plataforma" },
-                                { "id": "DPMX", "title": "Recuperación", "description": "Examen de recuperación" },
-                                { "id": "AKSD", "title": "Justificacion", "description": "Justificaion de falta" },
-                                { "id": "ÑPOK", "title": "Registro", "description": "Registro nombre" }
-                                
-                            ]
-                        }
-                    ]
+    {
+      "title": "PREGUNTAS FRECUENTES",
+      "rows": [
+        { "id": "1111", "title": "1 titulo", "description": "Plataforma de acceso" },
+        { "id": "2222", "title": "2 titulo", "description": "Cambio de horario" },
+        { "id": "3333", "title": "3 titulo", "description": "Solicitar justificación" },
+        { "id": "4444", "title": "4 titulo", "description": "Adquirir el libro" },
+        { "id": "5555", "title": "5 titulo", "description": "No registrado en la plataforma" },
+        { "id": "6666", "title": "6 titulo", "description": "Examen de recuperación" },
+        { "id": "7777", "title": "7 titulo", "description": "Justificación de falta" },
+        { "id": "8888", "title": "8 titulo", "description": "Registro nombre" },
+        { "id": "9999", "title": "9 titulo", "description": "Registro nombre" },
+        { "id": "1010", "title": "10 titulo", "description": "Registro nombre" }
+      ]
+    },
+    {
+      "title": "OTRAS PREGUNTAS",
+      "rows": [
+        { "id": "1212", "title": "11 titulo", "description": "Descripción pregunta 11" },
+        { "id": "1313", "title": "12 titulo", "description": "Descripción pregunta 12" },
+        { "id": "1414", "title": "13 titulo", "description": "Descripción pregunta 13" },
+        { "id": "1515", "title": "14 titulo", "description": "Descripción pregunta 14" },
+        { "id": "1616", "title": "15 titulo", "description": "Descripción pregunta 15" },
+        { "id": "1717", "title": "16 titulo", "description": "Descripción pregunta 16" },
+        { "id": "1818", "title": "17 titulo", "description": "Descripción pregunta 17" },
+        { "id": "1919", "title": "18 titulo", "description": "Descripción pregunta 18" },
+        { "id": "2020", "title": "19 titulo", "description": "Descripción pregunta 19" },
+        { "id": "2121", "title": "20 titulo", "description": "Descripción pregunta 20" }
+      ]
+    }
+  ]
                 }
             };
             await provider.sendList(ctx.from, list);
