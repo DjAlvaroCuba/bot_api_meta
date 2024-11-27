@@ -1,85 +1,44 @@
-import { google } from "googleapis";
-import { sheets_v4 } from "googleapis";
-import { config } from "dotenv"; // Importa dotenv
+const { sheets } = require('@googleapis/sheets');
+const { auth } = require('@googleapis/sheets'); // Accede a la autenticación
 
-// Carga las variables de entorno desde el archivo .env
-config();
+async function main() {
+    // Configuración del cliente de autenticación
+    const authClient = new auth.GoogleAuth({
+        keyFilename: 'muller-442915-dc991695a279.json', // Ruta al archivo JSON de las credenciales
+        scopes: ['https://www.googleapis.com/auth/spreadsheets'], // Alcance para lectura y escritura
+    });
+        
+    // Obtener una instancia autenticada del cliente de Google Sheets
+    const client = sheets({
+        version: 'v4',
+        auth: await authClient.getClient(),
+    });
 
-class SheetManager {
-    private sheets: sheets_v4.Sheets;
-    private spreadsheetId: string;
+    // Definir ID de la hoja y rango
+    const spreadsheetId = '1dj4algCFO4-CE--1nR4b2UDXIIIBa-FTbetaSukOs9A';
+    const range = 'Hoja 1'; // Ajusta el rango según tu hoja
 
-    constructor() {
-        const privateKey = process.env.privateKey;
-        const clientEmail = process.env.clientEmail;
-        const spreadsheetId = process.env.spreadsheetId;
+    try {
+        // Datos a agregar (puedes personalizarlos)
+        const values = [
+            ['Dato 1', 'Dato 2', 'Dato 3'], // Fila 1
+            ['Dato 4', 'Dato 5', 'Dato 6'], // Fila 2
+        ];
 
-        if (!privateKey || !clientEmail || !spreadsheetId) {
-            throw new Error("Faltan las variables de entorno requeridas: PRIVATE_KEY, CLIENT_EMAIL o SPREADSHEET_ID.");
-        }
+        // Usar append para agregar datos al final
+        const response = await client.spreadsheets.values.append({
+            spreadsheetId,
+            range,
+            valueInputOption: 'RAW', // RAW: texto sin formato; USER_ENTERED: interpreta fórmulas
+            requestBody: {
+                values, // Valores a insertar
+            },
+        });
 
-        const auth = new google.auth.JWT(
-            clientEmail, // Correo de la cuenta de servicio
-            null, // No necesitas el archivo de clave privada directamente, ya que lo has cargado en el entorno
-            privateKey, // Clave privada
-            ["https://www.googleapis.com/auth/spreadsheets"] // Permisos de acceso
-        );
-
-        this.sheets = google.sheets({ version: "v4", auth });
-        this.spreadsheetId = spreadsheetId;
-    }
-
-    async userExists(number: string): Promise<boolean> {
-        try {
-            const result = await this.sheets.spreadsheets.values.get({
-                spreadsheetId: this.spreadsheetId,
-                range: "Users!A:A",
-            });
-            const rows = result.data.values;
-            if (rows) {
-                const numbers = rows.map(row => row[0]);
-                return numbers.includes(number);
-            }
-            return false;
-        } catch (error) {
-            console.error("Error al verificar si el usuario existe", error);
-            return false;
-        }
-    }
-
-    async createUser(number: string, name: string, mail: string): Promise<void> {
-        try {
-            await this.sheets.spreadsheets.values.append({
-                spreadsheetId: this.spreadsheetId,
-                range: "Users!A:C",
-                valueInputOption: "RAW",
-                requestBody: {
-                    values: [[number, name, mail]],
-                },
-            });
-
-            await this.sheets.spreadsheets.batchUpdate({
-                spreadsheetId: this.spreadsheetId,
-                requestBody: {
-                    requests: [
-                        {
-                            addSheet: {
-                                properties: {
-                                    title: number,
-                                },
-                            },
-                        },
-                    ],
-                },
-            });
-        } catch (error: any) {
-            if (error.code === 400 && error.message.includes("already exists")) {
-                console.warn(`La hoja "${number}" ya existe.`);
-            } else {
-                console.error("Error al crear un usuario", error);
-            }
-        }
+        console.log('Datos agregados:', response.data.updates);
+    } catch (error) {
+        console.error('Error de la API:', error.response?.data || error.message);
     }
 }
 
-export default new SheetManager();
+main();

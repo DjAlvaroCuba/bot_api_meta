@@ -73,7 +73,7 @@ const sheetprueba = addKeyword("KkAM")
             await ctxFn.flowDynamic("Bienvenido a Muller : " + ctx.body )
             await ctxFn.state.update({"name":ctx.body})
             console.log(ctxFn.state.get("name"))
-            console.log(ctx.from)
+            console.log(ctx)
         }
     )
     .addAnswer("email", { capture: true },
