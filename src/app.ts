@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
-import sheetService from './services/sheetService';
+
 
 // Cargar variables de entorno desde .env
 config();
