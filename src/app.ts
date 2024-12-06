@@ -40,8 +40,8 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword("1010")
-    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://imgur.com/a/q6BgXfx" })
-    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://drive.google.com/file/d/1_R_JZX8ApwNp69sXI8ivNUidRE3TGPrs/view?usp=sharing" });
+    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://imgur.com/a/q6BgXfx" });
+    
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
