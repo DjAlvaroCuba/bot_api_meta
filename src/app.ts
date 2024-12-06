@@ -1,8 +1,16 @@
 import { join } from 'path'
+import { pathToFileURL } from 'url';
+const path = require('path');
+const url = require('url');
 import { config } from 'dotenv';
 import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
+// Ruta local al archivo
+const imagePath = join(process.cwd(), 'assets', 'FormaPago.png');
+
+// Convertir la ruta local a una URL válida
+const imageUrl = pathToFileURL(imagePath).href;
 
 
 // Cargar variables de entorno desde .env
@@ -39,8 +47,8 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword("1010")
-.addAnswer(`Send image from Local`, { media: join(process.cwd(), 'assets', 'FormaPago.png') })
-.addAnswer(`Send image from Local`, { media: join(process.cwd(), 'images', 'FormaPago.png') })
+  .addAnswer(`Send image from Local`, { media: fileUrl })
+  .addAnswer(`Send image from Local`, { media: fileUrl });
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
