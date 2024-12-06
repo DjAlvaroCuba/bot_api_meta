@@ -39,7 +39,7 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword("1010")
-    .addAnswer(`Send image from Local`, { media: join(process.cwd(), 'images', 'FormaPago.jpg') })
+    .addAnswer(`Send image from Local`, { media: "https://media.istockphoto.com/id/636379014/es/foto/manos-la-formaci%C3%B3n-de-una-forma-de-coraz%C3%B3n-con-silueta-al-atardecer.jpg?s=612x612&w=0&k=20&c=R2BE-RgICBnTUjmxB8K9U0wTkNoCKZRi-Jjge8o_OgE=" })
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
