@@ -40,7 +40,8 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword("1010")
-  .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://imgur.com/a/q6BgXfx" });
+    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://imgur.com/a/q6BgXfx" })
+    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://drive.google.com/file/d/1_R_JZX8ApwNp69sXI8ivNUidRE3TGPrs/view?usp=sharing" });
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
@@ -144,12 +145,20 @@ const main = async () => {
     adapterProvider.server.post(
         '/v1/messages',
         handleCtx(async (bot, req, res) => {
-            const { number, message, urlMedia } = req.body
-            await bot.sendMessage(number, message, { media: urlMedia ?? null })
-            return res.end('sended')
+            const { number, message, urlMedia } = req.body;
+            // Capturar número y mensaje en consola
+            console.log(`Nuevo mensaje recibido:`);
+            console.log(`Número: ${number}`);
+            console.log(`Mensaje: ${message}`);
+            
+            if (urlMedia) {
+                console.log(`Media URL: ${urlMedia}`);
+            }
+            // Enviar respuesta (opcional)
+            await bot.sendMessage(number, '¡Gracias por tu mensaje! Estamos procesándolo.');
+            return res.end('sended');
         })
-    )
-
+    );
     adapterProvider.server.post(
         '/v1/register',
         handleCtx(async (bot, req, res) => {
