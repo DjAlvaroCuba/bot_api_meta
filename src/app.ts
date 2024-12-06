@@ -39,7 +39,7 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword("1010")
-    .addAnswer(`Send image from Local`, { media: join(process.cwd(), 'assets', 'FormaPago.jpg') })
+    .addAnswer(`Send image from Local`, { media: join(process.cwd(), 'images', 'FormaPago.jpg') })
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
