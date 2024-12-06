@@ -39,7 +39,8 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword("1010")
-    .addAnswer(`Formas de pago`, { media: "https://drive.google.com/file/d/1_R_JZX8ApwNp69sXI8ivNUidRE3TGPrs/view?usp=drive_link" })
+.addAnswer(`Send image from Local`, { media: join(process.cwd(), 'assets', 'FormaPago.png') })
+.addAnswer(`Send image from Local`, { media: join(process.cwd(), 'images', 'FormaPago.png') })
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
@@ -140,26 +141,14 @@ const main = async () => {
         database: adapterDB,
     });
 
-   adapterProvider.server.post(
-    '/v1/messages',
-    handleCtx(async (bot, req, res) => {
-        const { number, message, urlMedia } = req.body;
-
-        // Capturar número y mensaje en consola
-        console.log(`Nuevo mensaje recibido:`);
-        console.log(`Número: ${number}`);
-        console.log(`Mensaje: ${message}`);
-        
-        if (urlMedia) {
-            console.log(`Media URL: ${urlMedia}`);
-        }
-
-        // Enviar respuesta (opcional)
-        await bot.sendMessage(number, '¡Gracias por tu mensaje! Estamos procesándolo.');
-        return res.end('sended');
-    })
-
-);
+    adapterProvider.server.post(
+        '/v1/messages',
+        handleCtx(async (bot, req, res) => {
+            const { number, message, urlMedia } = req.body
+            await bot.sendMessage(number, message, { media: urlMedia ?? null })
+            return res.end('sended')
+        })
+    )
 
     adapterProvider.server.post(
         '/v1/register',
