@@ -1,4 +1,4 @@
-
+import { join } from 'path'
 import { config } from 'dotenv';
 import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
@@ -38,10 +38,9 @@ const libroflow = addKeyword("6x0a")
 //       await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
 //});
 
-const examenflow = addKeyword("DPMX")
-    .addAction(async (ctx, ctxFn) => {
-        await ctxFn.flowDynamic("El *examen de recuperación* cuesta *S/. 21.00*. Puede pagarlo en caja y con la solicitud que le brinden, subir a la oficina de Centro de Idiomas para programar la fecha de su examen (de martes a viernes de 10am a 6pm). 😊");
-    });
+const examenflow = addKeyword("1010")
+    .addAnswer(`Send image from Local`, { media: join(process.cwd(), 'assets', 'FormaPago.jpg') })
+
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("Debe adquirir en caja una solicitud de justificación y presentarla a la oficina de centro de idiomas, Si la falta fue día de examen debe anexar un documento que valide la información para poder programar el examen sin ningún costo ");
@@ -92,7 +91,7 @@ const sheetprueba = addKeyword("KkAM")
 
 const welcomeFlow = addKeyword(["hola", "opciones"])
     .addAnswer(
-        '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*. Estoy aquí para ayudarte.',
+        '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
         { capture: false },
         async (ctx, { provider }) => {
             const list = {
@@ -114,7 +113,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                                 { "id": "7777", "title": "7 titulo", "description": "Justificaion de falta" },
                                 { "id": "8888", "title": "8 titulo", "description": "Registro nombre" },
                                 { "id": "9999", "title": "9 titulo", "description": "Registro nombre" },
-                                { "id": "1010", "title": "10 titulo", "description": "Registro nombre" }
+                                { "id": "1010", "title": "PAGO", "description": "Forma de pago" }
                                 
                             ]
                         }
@@ -126,7 +125,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow,  examenflow,justificacion_faltaflow,preguntaflow,sheetprueba]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
@@ -159,6 +158,7 @@ const main = async () => {
         await bot.sendMessage(number, '¡Gracias por tu mensaje! Estamos procesándolo.');
         return res.end('sended');
     })
+
 );
 
     adapterProvider.server.post(
