@@ -40,7 +40,7 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword("1010")
-    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://imgur.com/a/q6BgXfx" });
+    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://images.rawpixel.com/image_social_landscape/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA5L3JtNzA1ZGVzaWduLWVmZmVjdC10dS0wNmEuanBn.jpg" });
     
 
 const justificacion_faltaflow = addKeyword("AKSD")
