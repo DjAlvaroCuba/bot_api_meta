@@ -4,7 +4,7 @@ import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@b
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
 // Ruta local al archivo
-
+const pathLocal = join(process.cwd(), 'assets', 'FormaPago.jpg');
 
 // Cargar variables de entorno desde .env
 config();
@@ -40,13 +40,14 @@ const libroflow = addKeyword("6x0a")
 //});
 
 const examenflow = addKeyword('hello')
-    .addAction(async (_,{flowDynamic}) => {
-        const pathLocal = join('assets','sample.png')
-        // pathLocal = c:/doc.pdf
+    .addAction(async (_, { flowDynamic }) => {
         await flowDynamic([
-            {body:'This is a video', media: pathLocal }
-        ])
-    })
+            {
+                body: 'Este es un mensaje con un archivo local adjunto.',
+                media: pathLocal, // Usa la ruta absoluta aquí
+            },
+        ]);
+    });
         
     
 
