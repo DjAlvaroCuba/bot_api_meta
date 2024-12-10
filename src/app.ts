@@ -91,10 +91,20 @@ const sheetprueba = addKeyword("KkAM")
    // .addAnswer("Gracias por comunicarte conmigo")
     //.addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
     //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
-const flowalumno = addKeyword("formulario")
-    .addAnswer(
-        '¿Eres alumno de Muller?',{buttons: [{body: "Soy Alumno" } , {body:"No soy Alumno"}]}
-    )
+const flowalumno = addKeyword<Provider>("formulario")
+    .addAnswer("Eres alumno", {capture: true , buttons: [{body:"si"}, {body:"no"}]},
+    async(ctx,{gotoFlow}) => {
+        if(ctx.body === "si"){
+            return gotoFlow(welcomeFlow)
+
+        } else if (ctx.body === "no"){
+            return gotoFlow(sheetprueba)
+        }else {
+            return gotoFlow(flowalumno)
+        }
+    })
+
+
 const welcomeFlow = addKeyword(["hola", "opciones"])
     .addAnswer(
         '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
