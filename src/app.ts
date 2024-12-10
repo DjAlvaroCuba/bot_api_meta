@@ -41,7 +41,7 @@ const libroflow = addKeyword("6x0a")
 
 const examenflow = addKeyword('hello')
     .addAction(async (_,{flowDynamic}) => {
-        const pathLocal = join('assets','FormaPago.jpg')
+        const pathLocal = join('assets','sample.png')
         // pathLocal = c:/doc.pdf
         await flowDynamic([
             {body:'This is a video', media: pathLocal }
