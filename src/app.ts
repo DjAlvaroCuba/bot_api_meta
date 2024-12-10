@@ -39,9 +39,9 @@ const libroflow = addKeyword("6x0a")
 //       await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
 //});
 
-const examenflow = addKeyword("1010")
+const examenflow = addKeyword<Provider, Database>("1010")
     .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, 
-        { media: "./assets/FormaPago.jpg" });
+        { media: join(process.cwd(), 'assets', 'sample.png') })
     
 
 const justificacion_faltaflow = addKeyword("AKSD")
