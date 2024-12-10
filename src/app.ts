@@ -1,5 +1,6 @@
 import { join } from 'path'
 import { config } from 'dotenv';
+
 import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
@@ -39,17 +40,9 @@ const libroflow = addKeyword("6x0a")
 //       await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
 //});
 
-const examenflow = addKeyword('hello')
-    .addAction(async (_, { flowDynamic }) => {
-        await flowDynamic([
-            {
-                body: 'Este es un mensaje con un archivo local adjunto.',
-                media: pathLocal, // Usa la ruta absoluta aquí
-            },
-        ]);
-    });
+const examenflow = addKeyword("1010")
+    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg  " });
         
-    
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
