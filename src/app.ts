@@ -91,7 +91,10 @@ const sheetprueba = addKeyword("KkAM")
    // .addAnswer("Gracias por comunicarte conmigo")
     //.addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
     //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
-
+const flowalumno = addKeyword("formulario")
+    .addAnswer(
+        '¿Eres alumno de Muller?',{buttons: [{body: "Soy Alumno" } , {body:"No soy Alumno"}]}
+    )
 const welcomeFlow = addKeyword(["hola", "opciones"])
     .addAnswer(
         '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
@@ -128,7 +131,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
     );
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba,flowalumno ]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
