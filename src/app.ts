@@ -37,7 +37,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                         {
                             "title": "PREGUNTAS FRECUENTES",
                             "rows": [
-                                { "id": "1111", "title": "1 titulo", "description": "Plataforma de acceso" },
+                                { "id": "1111", "title": "Ingreso", "description": "¿Como ingreso a la plataforma ?" },
                                 { "id": "2222", "title": "2 titulo", "description": "Cambio de horario" },
                                 { "id": "3333", "title": "3 titulo", "description": "Solicitar justificación" },
                                 { "id": "4444", "title": "4 titulo", "description": "Adquirir el libro" },
@@ -64,17 +64,20 @@ const pagoflow = addKeyword("1010")
     .addAnswer(`Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻` );
 
 //
-const ingresoflow = addKeyword("ui3v")
+const ingresoflow = addKeyword("1111")
     .addAction(async (ctx, ctxFn) => {
-        await ctxFn.flowDynamic("*PASO PARA INGRESAR A LA PLATAFORMA* ");
-        await ctxFn.flowDynamic("(1) Hacer clic en la página de Paul Müller *https://idiomaspaulmuller.servidor-vps.space/login* ");
-        await ctxFn.flowDynamic("(2) Colocar tu número de DNI \n\n *EJEMPLO*\n\n USUARIO = *00000(SU DNI)* \n\nCONTRASEÑA = *000000(SU DNI)*");
+        await ctxFn.flowDynamic("*PASOS PARA INGRESAR A LA PLATAFORMA* ");
+        await ctxFn.flowDynamic("*PRIMERO* Ingresas al siguiente enlace  *https://idiomaspaulmuller.servidor-vps.space/login*");
+        await ctxFn.flowDynamic("*SEGUNDO* Cuando te pida las credenciales debes colocar tu DNI en los dos campos , de esta forma : \n\n USUARIO = *TU DNI* \n\nCONTRASEÑA = *TU DNI*");
     });
 
-const horarioflow = addKeyword("6QDX")
+const horarioflow = addKeyword("2222")
     .addAction(async (ctx, ctxFn) => {
-        await ctxFn.flowDynamic("Buen día, ¿a qué horario desea cambiarlo? Así puedo darle una fecha de inicio. 😊\n\n *Recuerde que el cambio de horario tiene un costo de S/.11.00 y se realiza después de tomar su examen final.*");
+        await ctxFn.flowDynamic("Buen día,\n _Para el cambio de horario debe comunicarse con este numero_ \n" );
+        await ctxFn.flowDynamic("*https://wa.me/message/SIDQZGO3WXBSC1*");
+        await ctxFn.flowDynamic("_Recuerde que el cambio de horario tiene un costo de S/.11.00 y se realiza después de tomar su examen final._");
     });
+    
 
 const justificacionflow = addKeyword("BxJG")
     .addAction(async (ctx, ctxFn) => {
