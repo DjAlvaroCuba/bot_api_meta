@@ -6,7 +6,6 @@ import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
 
 
-// Cargar variables de entorno desde .env
 config();
 
 const PORT = process.env.PORT ?? 3008;
