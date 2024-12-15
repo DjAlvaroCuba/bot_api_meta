@@ -9,7 +9,7 @@ const PORT = process.env.PORT ?? 3008;
 
 // Definición de flujos
 //Flujo inicial 
-const initialflow = addKeyword<Provider>("formulario")
+const initialflow = addKeyword<Provider>("Hola")
     .addAnswer("Hola , gracias por comunicarte conmigo , para darte una mejor experiencia responde la siguiente pregunta: ")
     .addAnswer("Eres alumno de Muller", {capture: true , buttons: [{body:"si,soy alumno"}, {body:"no soy alumno"}]},
     async(ctx,{gotoFlow}) => {
@@ -22,7 +22,7 @@ const initialflow = addKeyword<Provider>("formulario")
         }
     })
 //flujo de bienvenida alumno 
-const welcomeFlow = addKeyword(["hola", "opciones"])
+const welcomeFlow = addKeyword(["opciones"])
     .addAnswer(
         '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
         { capture: false },
@@ -38,7 +38,7 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                             "title": "PREGUNTAS FRECUENTES",
                             "rows": [
                                 { "id": "1111", "title": "Ingreso", "description": "¿Como ingreso a la plataforma ?" },
-                                { "id": "2222", "title": "2 titulo", "description": "Cambio de horario" },
+                                { "id": "2222", "title": "Horario", "description": "Cambio de horario" },
                                 { "id": "3333", "title": "3 titulo", "description": "Solicitar justificación" },
                                 { "id": "4444", "title": "4 titulo", "description": "Adquirir el libro" },
                                 { "id": "5555", "title": "5 titulo", "description": "No registrado en la plataforma" },
@@ -54,8 +54,10 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
                 }
             };
             await provider.sendList(ctx.from, list);
+            
         }
     );
+    
 //flujo de pago
 
 const pagoflow = addKeyword("1010")
@@ -63,17 +65,17 @@ const pagoflow = addKeyword("1010")
     .addAnswer("*Recuerda*")
     .addAnswer(`Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻` );
 
-//
+//flujo de ingreso 
 const ingresoflow = addKeyword("1111")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("*PASOS PARA INGRESAR A LA PLATAFORMA* ");
         await ctxFn.flowDynamic("*PRIMERO* Ingresas al siguiente enlace  *https://idiomaspaulmuller.servidor-vps.space/login*");
         await ctxFn.flowDynamic("*SEGUNDO* Cuando te pida las credenciales debes colocar tu DNI en los dos campos , de esta forma : \n\n USUARIO = *TU DNI* \n\nCONTRASEÑA = *TU DNI*");
     });
-
+//flujo de cambio de horario
 const horarioflow = addKeyword("2222")
     .addAction(async (ctx, ctxFn) => {
-        await ctxFn.flowDynamic("Buen día,\n _Para el cambio de horario debe comunicarse con este numero_ \n" );
+        await ctxFn.flowDynamic("Buen día,_Para el cambio de horario debe comunicarse con este numero_ \n" );
         await ctxFn.flowDynamic("*https://wa.me/message/SIDQZGO3WXBSC1*");
         await ctxFn.flowDynamic("_Recuerde que el cambio de horario tiene un costo de S/.11.00 y se realiza después de tomar su examen final._");
     });
