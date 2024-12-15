@@ -9,7 +9,7 @@ const PORT = process.env.PORT ?? 3008;
 
 // Definición de flujos
 //Flujo inicial 
-const initialflow = addKeyword<Provider>("")
+const initialflow = addKeyword<Provider>("formulario")
     .addAnswer("Hola , gracias por comunicarte conmigo , para darte una mejor experiencia responde la siguiente pregunta: ")
     .addAnswer("Eres alumno de Muller", {capture: true , buttons: [{body:"si,soy alumno"}, {body:"no soy alumno"}]},
     async(ctx,{gotoFlow}) => {
