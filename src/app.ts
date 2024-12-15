@@ -4,8 +4,7 @@ import { config } from 'dotenv';
 import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
-// Ruta local al archivo
-const pathLocal = join(process.cwd(), 'assets', 'FormaPago.jpg');
+
 
 // Cargar variables de entorno desde .env
 config();
@@ -87,8 +86,8 @@ const sheetprueba = addKeyword("KkAM")
     );
 //prueba-final sheet
 
-//const defaultFlow = addKeyword('')
-   // .addAnswer("Gracias por comunicarte conmigo")
+const chupapiflow = addKeyword('')
+   .addAnswer("Joven ahorita estoy ocupado , provincia atiendo mañana")
     //.addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
     //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
 const flowalumno = addKeyword<Provider>("formulario")
@@ -139,9 +138,9 @@ const welcomeFlow = addKeyword(["hola", "opciones"])
             await provider.sendList(ctx.from, list);
         }
     );
-
+//welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba,flowalumno 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba,flowalumno ]);
+    const adapterFlow = createFlow([chupapiflow]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
