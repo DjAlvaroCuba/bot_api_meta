@@ -1,16 +1,69 @@
-import { join } from 'path'
+//import { join } from 'path'
 import { config } from 'dotenv';
-
 import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@builderbot/bot';
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
-
-
 config();
 
 const PORT = process.env.PORT ?? 3008;
 
 // Definición de flujos
+//Flujo inicial 
+const initialflow = addKeyword<Provider>("")
+    .addAnswer("Hola , gracias por comunicarte conmigo , para darte una mejor experiencia responde la siguiente pregunta: ")
+    .addAnswer("Eres alumno de Muller", {capture: true , buttons: [{body:"si,soy alumno"}, {body:"no soy alumno"}]},
+    async(ctx,{gotoFlow}) => {
+        if(ctx.body === "si,soy alumno"){
+            return gotoFlow(welcomeFlow)
+        } else if (ctx.body === "no soy alumno"){
+            return gotoFlow(sheetprueba)
+        }else {
+            return gotoFlow(initialflow)
+        }
+    })
+//flujo de bienvenida alumno 
+const welcomeFlow = addKeyword(["hola", "opciones"])
+    .addAnswer(
+        '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
+        { capture: false },
+        async (ctx, { provider }) => {
+            const list = {
+                "header": { "type": "text", "text": "¿En qué te podemos ayudar hoy?" },
+                "body": { "text": "Elige una opción." },
+                "footer": { "text": "Centro de Idiomas Paul Múller" },
+                "action": {
+                    "button": "OPCIONES",
+                    "sections": [
+                        {
+                            "title": "PREGUNTAS FRECUENTES",
+                            "rows": [
+                                { "id": "1111", "title": "1 titulo", "description": "Plataforma de acceso" },
+                                { "id": "2222", "title": "2 titulo", "description": "Cambio de horario" },
+                                { "id": "3333", "title": "3 titulo", "description": "Solicitar justificación" },
+                                { "id": "4444", "title": "4 titulo", "description": "Adquirir el libro" },
+                                { "id": "5555", "title": "5 titulo", "description": "No registrado en la plataforma" },
+                                { "id": "6666", "title": "6 titulo", "description": "Examen de recuperación" },
+                                { "id": "7777", "title": "7 titulo", "description": "Justificaion de falta" },
+                                { "id": "8888", "title": "8 titulo", "description": "Registro nombre" },
+                                { "id": "9999", "title": "9 titulo", "description": "Registro nombre" },
+                                { "id": "1010", "title": "PAGO", "description": "Forma de pago" }
+                                
+                            ]
+                        }
+                    ]
+                }
+            };
+            await provider.sendList(ctx.from, list);
+        }
+    );
+//flujo de pago
+
+const pagoflow = addKeyword("1010")
+    .addAnswer( "_Aqui te muestro como pagar , no olvides seguir los pasos_",{ media:"https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg "})
+    .addAnswer("*Recuerda*")
+    .addAnswer(`Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻` );
+
+//
 const ingresoflow = addKeyword("ui3v")
     .addAction(async (ctx, ctxFn) => {
         await ctxFn.flowDynamic("*PASO PARA INGRESAR A LA PLATAFORMA* ");
@@ -38,9 +91,7 @@ const libroflow = addKeyword("6x0a")
 //       await ctxFn.flowDynamic("¡Buen día! Me puedes enviar los siguientes datos:\n\nNombres:\nApellidos:\nDNI:\nHorario:\nProfesor:\nBásico:");
 //});
 
-const examenflow = addKeyword("1010")
-    .addAnswer(`*Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻*`, { media: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg  " });
-        
+
 
 const justificacion_faltaflow = addKeyword("AKSD")
     .addAction(async (ctx, ctxFn) => {
@@ -85,61 +136,17 @@ const sheetprueba = addKeyword("KkAM")
     );
 //prueba-final sheet
 
-const chupapiflow = addKeyword('')
-   .addAnswer("Joven ahorita estoy ocupado , provincia atiendo mañana")
+//const chupapiflow = addKeyword('')
+   //.addAnswer("Joven ahorita estoy ocupado , provincia atiendo mañana")
     //.addAnswer("Estoy aquí para ayudarte con la información que necesitas.", { buttons: [{ body: "opciones" }] });
     //await ctxFn.flowDynamic("Peefecto: " + ctx.body + "...")
-const flowalumno = addKeyword<Provider>("formulario")
-    .addAnswer("Eres alumno", {capture: true , buttons: [{body:"si"}, {body:"no"}]},
-    async(ctx,{gotoFlow}) => {
-        if(ctx.body === "si"){
-            return gotoFlow(welcomeFlow)
-
-        } else if (ctx.body === "no"){
-            return gotoFlow(sheetprueba)
-        }else {
-            return gotoFlow(flowalumno)
-        }
-    })
 
 
-const welcomeFlow = addKeyword(["hola", "opciones"])
-    .addAnswer(
-        '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
-        { capture: false },
-        async (ctx, { provider }) => {
-            const list = {
-                "header": { "type": "text", "text": "¿En qué te podemos ayudar hoy?" },
-                "body": { "text": "Elige una opción." },
-                "footer": { "text": "Centro de Idiomas Paul Múller" },
-                "action": {
-                    "button": "OPCIONES",
-                    "sections": [
-                        {
-                            "title": "PREGUNTAS FRECUENTES",
-                            "rows": [
-                                { "id": "1111", "title": "1 titulo", "description": "Plataforma de acceso" },
-                                { "id": "2222", "title": "2 titulo", "description": "Cambio de horario" },
-                                { "id": "3333", "title": "3 titulo", "description": "Solicitar justificación" },
-                                { "id": "4444", "title": "4 titulo", "description": "Adquirir el libro" },
-                                { "id": "5555", "title": "5 titulo", "description": "No registrado en la plataforma" },
-                                { "id": "6666", "title": "6 titulo", "description": "Examen de recuperación" },
-                                { "id": "7777", "title": "7 titulo", "description": "Justificaion de falta" },
-                                { "id": "8888", "title": "8 titulo", "description": "Registro nombre" },
-                                { "id": "9999", "title": "9 titulo", "description": "Registro nombre" },
-                                { "id": "1010", "title": "PAGO", "description": "Forma de pago" }
-                                
-                            ]
-                        }
-                    ]
-                }
-            };
-            await provider.sendList(ctx.from, list);
-        }
-    );
-//welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, examenflow,justificacion_faltaflow,preguntaflow,sheetprueba,flowalumno 
+
+
+
 const main = async () => {
-    const adapterFlow = createFlow([chupapiflow]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, pagoflow,justificacion_faltaflow,preguntaflow,sheetprueba,initialflow]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
