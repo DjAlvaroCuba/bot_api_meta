@@ -9,20 +9,20 @@ const PORT = process.env.PORT ?? 3008;
 
 // Definición de flujos
 //Flujo inicial 
-const initialflow = addKeyword<Provider>("Hola")
-    .addAnswer("Hola , gracias por comunicarte conmigo , para darte una mejor experiencia responde la siguiente pregunta: ")
-    .addAnswer("Eres alumno de Muller", {capture: true , buttons: [{body:"si,soy alumno"}, {body:"no soy alumno"}]},
-    async(ctx,{gotoFlow}) => {
-        if(ctx.body === "si,soy alumno"){
-            return gotoFlow(welcomeFlow)
-        } else if (ctx.body === "no soy alumno"){
-            return gotoFlow(sheetprueba)
-        }else {
-            return gotoFlow(initialflow)
-        }
-    })
+//const initialflow = addKeyword<Provider>("Hola")
+//    .addAnswer("Hola , gracias por comunicarte conmigo , para darte una mejor experiencia responde la siguiente pregunta: ")
+//    .addAnswer("Eres alumno de Muller", {capture: true , buttons: [{body:"si,soy alumno"}, {body:"no soy alumno"}]},
+//    async(ctx,{gotoFlow}) => {
+//        if(ctx.body === "si,soy alumno"){
+//            return gotoFlow(welcomeFlow)
+//        } else if (ctx.body === "no soy alumno"){
+//            return gotoFlow(sheetprueba)
+//        }else {
+//            return gotoFlow(initialflow)
+//        }
+//    })
 //flujo de bienvenida alumno 
-const welcomeFlow = addKeyword(["opciones"])
+const welcomeFlow = addKeyword([""])
     .addAnswer(
         '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
         { capture: false },
@@ -58,13 +58,6 @@ const welcomeFlow = addKeyword(["opciones"])
         }
     );
     
-//flujo de pago
-
-const pagoflow = addKeyword("1010")
-    .addAnswer( "_Aqui te muestro como pagar , no olvides seguir los pasos_",{ media:"https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg "})
-    .addAnswer("*Recuerda*")
-    .addAnswer(`Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻` );
-
 //flujo de ingreso 
 const ingresoflow = addKeyword("1111")
     .addAction(async (ctx, ctxFn) => {
@@ -78,8 +71,16 @@ const horarioflow = addKeyword("2222")
         await ctxFn.flowDynamic("Buen día,_Para el cambio de horario debe comunicarse con este numero_ \n" );
         await ctxFn.flowDynamic("*https://wa.me/message/SIDQZGO3WXBSC1*");
         await ctxFn.flowDynamic("_Recuerde que el cambio de horario tiene un costo de S/.11.00 y se realiza después de tomar su examen final._");
-    });
-    
+    }); 
+//flujo de pago 
+const pagoflow = addKeyword("1010")
+    .addAction(async(ctxFn) => {
+        await ctxFn.flowDynamic( "_Aqui te muestro como pagar , no olvides seguir los pasos_", { media:"https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg "});
+        await ctxFn.flowDynamic( "*Recuerda*");
+        await ctxFn.flowDynamic( `Colocar tu nombre completo y N° de DNI en la referencia del pago para identificarte como estudiante.😊👋🏻` );
+        
+    }) 
+
 
 const justificacionflow = addKeyword("BxJG")
     .addAction(async (ctx, ctxFn) => {
@@ -151,7 +152,7 @@ const sheetprueba = addKeyword("KkAM")
 
 
 const main = async () => {
-    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, pagoflow,justificacion_faltaflow,preguntaflow,sheetprueba,initialflow]);
+    const adapterFlow = createFlow([welcomeFlow, ingresoflow, horarioflow, justificacionflow, libroflow, pagoflow,justificacion_faltaflow,preguntaflow,sheetprueba]);
     const adapterProvider = createProvider(Provider, {
         jwtToken: process.env.JWT_TOKEN,
         numberId: process.env.NUMBER_ID,
