@@ -4,7 +4,15 @@ import { createBot, createProvider, createFlow, addKeyword, addAnswer } from '@b
 import { MemoryDB as Database } from '@builderbot/bot';
 import { MetaProvider as Provider } from '@builderbot/provider-meta';
 config();
+const { GoogleGenerativeAI } = require("@google/generative-ai");
 
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+const prompt = "Ehola , soy Alvaro";
+
+const result = await model.generateContent(prompt);
+console.log(result.response.text());
 const PORT = process.env.PORT ?? 3008;
 
 // Definición de flujos
@@ -22,7 +30,7 @@ const PORT = process.env.PORT ?? 3008;
 //        }
 //    })
 //flujo de bienvenida alumno 
-const welcomeFlow = addKeyword([""])
+const welcomeFlow = addKeyword(["hola"])
     .addAnswer(
         '¡Hola! Bienvenido al *Centro de Idiomas Paul Múller*',
         { capture: false },
