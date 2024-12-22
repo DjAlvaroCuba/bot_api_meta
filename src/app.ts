@@ -14,16 +14,10 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Prompt base que define el contexto
 const basePrompt = `
-PASO PARA INGRESAR A LA PLATAFORMA:
-(1) hacer clic en la página de Paul Müller: 
-https://idiomaspaulmuller.servidor-vps.space/login
-(2) Colocar tu número de DNI.
+Responde , solo con la informacion que se encuetra aqui , con respuesta cortas , se amable , si la respuesta esta fuera de contexto o no pertenece simplemente dile , gracias pero sino fie de ayuda puedo comunicarlo con mi asesor humano.
+Uno de los mejores Institutos de Educación Superior Privada en Perú, dedicados a la formación de profesionales altamente capacitados para enfrentar el competitivo mercado laboral. Ofrecemos una educación de excelencia, respaldada por más de 31 años de experiencia y un compromiso con el desarrollo integral de nuestros estudiantes.
+En el Instituto Paul Müller, nuestra cultura institucional promueve relaciones solidarias, trabajo en equipo y responsabilidad, enfocándonos en la mejora continua para garantizar la calidad educativa.
 
-Ejemplo: 
-USUARIO: 0000000 (SU DNI)
-CONTRASEÑA: 0000000 (SU DNI)
-
-Por favor, responde únicamente con base en esta información. Si no puedes responder, indícalo.
 `;
 
 // Flujo de ingreso que utiliza el prompt base junto con el mensaje del usuario
@@ -34,7 +28,7 @@ const ingresoflow = addKeyword("")
             const userPrompt = ctx.body;
 
             // Construye el prompt para la IA combinando el basePrompt con el mensaje del usuario
-            const finalPrompt = `${basePrompt}\nUsuario: ${userPrompt}\nIA:`;
+            const finalPrompt = `${basePrompt}+${userPrompt}`;
 
             // Genera respuesta usando GoogleGenerativeAI
             const result = await model.generateContent(finalPrompt);
