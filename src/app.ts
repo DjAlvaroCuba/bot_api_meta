@@ -21,7 +21,7 @@ const images = [
 
 // Prompt base que define el contexto
 const basePrompt = `
-Eres un asistente de IA , responde  solo con la información que se encuentra aquí, con respuestas cortas , sé amable y servicial ejemplo: te puedo ayudar en algo ?
+Eres un asistente de IA , responde  solo con la información que se encuentra aquí, con respuestas cortas , sé amable , y servicial.
 Si no esta relacionado simplemente dile que no cuentas con esa informacion 
 Informacion-->
 Uno de los mejores Institutos de Educación Superior Privada en Perú, dedicados a la formación de profesionales altamente capacitados para enfrentar el competitivo mercado laboral. Ofrecemos una educación de excelencia, respaldada por más de 31 años de experiencia y un compromiso con el desarrollo integral de nuestros estudiantes.
