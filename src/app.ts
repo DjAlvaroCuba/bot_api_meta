@@ -14,9 +14,9 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Lista de imágenes con palabras clave asociadas
 const images = [
-    { keyword: "instituto", url: "https://example.com/instituto.jpg" },
-    { keyword: "cursos", url: "https://example.com/cursos.jpg" },
-    { keyword: "estudiantes", url: "https://example.com/estudiantes.jpg" },
+    { keyword: "instituto", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
+    { keyword: "cursos", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
+    { keyword: "estudiantes", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
 ];
 
 // Prompt base que define el contexto
