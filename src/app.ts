@@ -12,21 +12,38 @@ const PORT = process.env.PORT ?? 3008;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-// Flujo de ingreso que usa GoogleGenerativeAI
-const ingresoflow = addKeyword("") // "start" es solo un ejemplo; ajusta según cómo inicie el flujo
+// Prompt base que define el contexto
+const basePrompt = `
+PASO PARA INGRESAR A LA PLATAFORMA:
+(1) hacer clic en la página de Paul Müller: 
+https://idiomaspaulmuller.servidor-vps.space/login
+(2) Colocar tu número de DNI.
+
+Ejemplo: 
+USUARIO: 0000000 (SU DNI)
+CONTRASEÑA: 0000000 (SU DNI)
+
+Por favor, responde únicamente con base en esta información. Si no puedes responder, indícalo.
+`;
+
+// Flujo de ingreso que utiliza el prompt base junto con el mensaje del usuario
+const ingresoflow = addKeyword("")
     .addAction(async (ctx, ctxFn) => {
         try {
-            // Captura el mensaje del usuario como prompt
-            const userPrompt = ctx.body; // `ctx.body` contiene el mensaje del usuario
-            
+            // Captura el mensaje del usuario
+            const userPrompt = ctx.body;
+
+            // Construye el prompt para la IA combinando el basePrompt con el mensaje del usuario
+            const finalPrompt = `${basePrompt}\nUsuario: ${userPrompt}\nIA:`;
+
             // Genera respuesta usando GoogleGenerativeAI
-            const result = await model.generateContent(userPrompt);
-            const aiResponse = result.response.text(); // Extrae el texto generado
-            
+            const result = await model.generateContent(finalPrompt);
+            const aiResponse = result.response.text();
+
             // Envía la respuesta generada al usuario
             await ctxFn.flowDynamic(aiResponse);
         } catch (error) {
-            console.error("Error generando respuesta con GoogleGenerativeAI:", error);
+            console.error("Error generando respuesta:", error);
             // Respuesta en caso de error
             await ctxFn.flowDynamic("Hubo un problema al procesar tu solicitud. Por favor, intenta nuevamente.");
         }
@@ -49,7 +66,6 @@ const main = async () => {
         database: adapterDB,
     });
 
-    // Configuración de rutas POST adicionales
     adapterProvider.server.post(
         '/v1/messages',
         handleCtx(async (bot, req, res) => {
