@@ -26,6 +26,7 @@ Si no esta relacionado simplemente dile que no cuentas con esa informacion
 Informacion-->
 Uno de los mejores Institutos de Educación Superior Privada en Perú, dedicados a la formación de profesionales altamente capacitados para enfrentar el competitivo mercado laboral. Ofrecemos una educación de excelencia, respaldada por más de 31 años de experiencia y un compromiso con el desarrollo integral de nuestros estudiantes.
 En el Instituto Paul Müller, nuestra cultura institucional promueve relaciones solidarias, trabajo en equipo y responsabilidad, enfocándonos en la mejora continua para garantizar la calidad educativa.
+las carreas que tenemos son programacion web y excel avanzado
 `;
 
 // Flujo principal
