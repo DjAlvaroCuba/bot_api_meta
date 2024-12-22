@@ -21,7 +21,7 @@ const images = [
 
 // Prompt base que define el contexto
 const basePrompt = `
-Responde , solo con la información que se encuentra aquí, con respuestas cortas , sé amable. 
+Responde en menos de 50 palabras, solo con la información que se encuentra aquí, con respuestas cortas , sé amable y siempre finaliza con un mensaje si la respuesta lo ayuda?  
 Si no esta relacionado simplemente dile que no cuentas con esa informacion 
 Uno de los mejores Institutos de Educación Superior Privada en Perú, dedicados a la formación de profesionales altamente capacitados para enfrentar el competitivo mercado laboral. Ofrecemos una educación de excelencia, respaldada por más de 31 años de experiencia y un compromiso con el desarrollo integral de nuestros estudiantes.
 En el Instituto Paul Müller, nuestra cultura institucional promueve relaciones solidarias, trabajo en equipo y responsabilidad, enfocándonos en la mejora continua para garantizar la calidad educativa.
@@ -37,8 +37,7 @@ const ingresoflow = addKeyword("")
             // Construye el prompt para identificar si se requiere una imagen
             const themePrompt = `
                 Usuario: ${userPrompt}
-                Dado el mensaje anterior, identifica el tema o palabra clave más relevante para buscar una imagen. 
-                Si el mensaje no solicita una imagen, responde 'ninguna'.
+                Dado el mensaje anterior, identifica el tema o palabra clave más relevante para buscar una imagen , limitate a responder solo al palabra clave 
             `;
 
             // Genera una respuesta para identificar el tema
