@@ -16,13 +16,13 @@ const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 const images = [
     { keyword: "instituto", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
     { keyword: "cursos", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
-    { keyword: "estudiantes", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
+    { keyword: "allcats", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/logo_allcats.png" },
 ];
 
 // Prompt base que define el contexto
 const basePrompt = `
-Responde, solo con la información que se encuentra aquí, con respuestas cortas, sé amable. 
-Si la respuesta está fuera de contexto o no pertenece, simplemente dile: "Gracias, pero si no fui de ayuda, puedo comunicarlo con mi asesor humano."
+Responde , solo con la información que se encuentra aquí, con respuestas cortas , sé amable. 
+Si no esta relacionado simplemente dile que no cuentas con esa informacion 
 Uno de los mejores Institutos de Educación Superior Privada en Perú, dedicados a la formación de profesionales altamente capacitados para enfrentar el competitivo mercado laboral. Ofrecemos una educación de excelencia, respaldada por más de 31 años de experiencia y un compromiso con el desarrollo integral de nuestros estudiantes.
 En el Instituto Paul Müller, nuestra cultura institucional promueve relaciones solidarias, trabajo en equipo y responsabilidad, enfocándonos en la mejora continua para garantizar la calidad educativa.
 `;
