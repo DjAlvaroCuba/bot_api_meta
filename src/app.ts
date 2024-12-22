@@ -7,22 +7,27 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 config();
 const PORT = process.env.PORT ?? 3008;
+
 // Inicialización de GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 // Flujo de ingreso que usa GoogleGenerativeAI
-const ingresoflow = addKeyword("ACA ES DONDE QUIERO QUE VAYA EL PROMPT")
+const ingresoflow = addKeyword("") // "start" es solo un ejemplo; ajusta según cómo inicie el flujo
     .addAction(async (ctx, ctxFn) => {
         try {
-            const userPrompt = ctx.body || "Default prompt if no input"; // Captura el mensaje del usuario
-            const result = await model.generateContent(userPrompt); // Genera respuesta usando GoogleGenerativeAI
+            // Captura el mensaje del usuario como prompt
+            const userPrompt = ctx.body; // `ctx.body` contiene el mensaje del usuario
+            
+            // Genera respuesta usando GoogleGenerativeAI
+            const result = await model.generateContent(userPrompt);
             const aiResponse = result.response.text(); // Extrae el texto generado
             
             // Envía la respuesta generada al usuario
             await ctxFn.flowDynamic(aiResponse);
         } catch (error) {
             console.error("Error generando respuesta con GoogleGenerativeAI:", error);
+            // Respuesta en caso de error
             await ctxFn.flowDynamic("Hubo un problema al procesar tu solicitud. Por favor, intenta nuevamente.");
         }
     });
@@ -44,6 +49,7 @@ const main = async () => {
         database: adapterDB,
     });
 
+    // Configuración de rutas POST adicionales
     adapterProvider.server.post(
         '/v1/messages',
         handleCtx(async (bot, req, res) => {
@@ -73,6 +79,7 @@ const main = async () => {
         })
     );
 
+    // Iniciar el servidor
     httpServer(+PORT);
 };
 
