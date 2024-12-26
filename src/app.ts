@@ -12,7 +12,6 @@ const PORT = process.env.PORT ?? 3008;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
-// Lista de imágenes con palabras clave asociadas
 const images = [
     { keyword: "instituto", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
     { keyword: "cursos", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
@@ -29,6 +28,9 @@ En el Instituto Paul Müller, nuestra cultura institucional promueve relaciones 
 las carreas que tenemos son programacion web y excel avanzado
 `;
 
+// Historial de chat
+const chatHistory: { role: "user" | "model"; text: string }[] = [];
+
 // Flujo principal
 const ingresoflow = addKeyword("")
     .addAction(async (ctx, ctxFn) => {
@@ -36,29 +38,21 @@ const ingresoflow = addKeyword("")
             // Captura el mensaje del usuario
             const userPrompt = ctx.body;
 
-            // Construye el prompt para identificar si se requiere una imagen
-            const themePrompt = `
-                Usuario: ${userPrompt}
-                Dado el mensaje anterior, identifica el tema o palabra clave más relevante para buscar una imagen , limitate a responder solo al palabra clave 
-            `;
+            // Agrega el mensaje del usuario al historial
+            chatHistory.push({ role: "user", text: userPrompt });
 
-            // Genera una respuesta para identificar el tema
-            const themeResult = await model.generateContent(themePrompt);
-            const detectedTheme = themeResult.response.text().trim().toLowerCase();
+            // Construye el historial como texto para el modelo
+            const formattedHistory = chatHistory.map(msg => `${msg.role === "user" ? "Usuario" : "Modelo"}: ${msg.text}`).join("\n");
 
-            // Busca la imagen correspondiente
-            const image = images.find(img => detectedTheme.includes(img.keyword));
+            // Construye el prompt completo con el historial
+            const responsePrompt = `${basePrompt}\n${formattedHistory}\nModelo:`;
 
-            if (image) {
-                // Envía la imagen si se encuentra una coincidencia
-                await ctxFn.flowDynamic([{ body: "Aquí tienes la imagen solicitada:", media: image.url }]);
-                return;
-            }
-
-            // Si no hay solicitud de imagen, procesa como un mensaje normal
-            const responsePrompt = `${basePrompt}\n${userPrompt}`;
+            // Genera una respuesta basada en el historial
             const responseResult = await model.generateContent(responsePrompt);
-            const aiResponse = responseResult.response.text();
+            const aiResponse = responseResult.response.text().trim();
+
+            // Agrega la respuesta del modelo al historial
+            chatHistory.push({ role: "model", text: aiResponse });
 
             // Envía la respuesta generada al usuario
             await ctxFn.flowDynamic(aiResponse);
