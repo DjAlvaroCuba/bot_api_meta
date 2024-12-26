@@ -72,7 +72,7 @@ const ingresoflow = addKeyword("")
 
             // Agrega la respuesta del modelo al historial
             chatHistory.push({ role: "model", text: aiResponse });
-
+            console.log("Historial de chat actualizado tras la respuesta del modelo:", chatHistory);
             // Envía la respuesta generada al usuario
             await ctxFn.flowDynamic(aiResponse);
         } catch (error) {
@@ -81,7 +81,7 @@ const ingresoflow = addKeyword("")
             await ctxFn.flowDynamic("Hubo un problema al procesar tu solicitud. Por favor, intenta nuevamente.");
         }
     });
-
+//model.count(charthistoryu)
 // Configuración principal del bot
 const main = async () => {
     const adapterFlow = createFlow([ingresoflow]);
