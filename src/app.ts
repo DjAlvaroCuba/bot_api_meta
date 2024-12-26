@@ -12,6 +12,7 @@ const PORT = process.env.PORT ?? 3008;
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
+// Lista de imágenes asociadas a palabras clave
 const images = [
     { keyword: "instituto", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
     { keyword: "cursos", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
@@ -44,10 +45,28 @@ const ingresoflow = addKeyword("")
             // Construye el historial como texto para el modelo
             const formattedHistory = chatHistory.map(msg => `${msg.role === "user" ? "Usuario" : "Modelo"}: ${msg.text}`).join("\n");
 
-            // Construye el prompt completo con el historial
-            const responsePrompt = `${basePrompt}\n${formattedHistory}\nModelo:`;
+            // Construye el prompt para identificar imágenes
+            const themePrompt = `
+                Usuario: ${userPrompt}
+                Dado el mensaje anterior, identifica el tema o palabra clave más relevante para buscar una imagen. 
+                Responde con una sola palabra clave si aplica, o responde "ninguna" si no se necesita una imagen.
+            `;
 
-            // Genera una respuesta basada en el historial
+            // Genera una respuesta para identificar el tema
+            const themeResult = await model.generateContent(themePrompt);
+            const detectedTheme = themeResult.response.text().trim().toLowerCase();
+
+            // Verifica si hay una palabra clave asociada a una imagen
+            const image = images.find(img => detectedTheme.includes(img.keyword));
+
+            if (image) {
+                // Envía la imagen si se encuentra una coincidencia
+                await ctxFn.flowDynamic([{ body: "Aquí tienes la imagen solicitada:", media: image.url }]);
+                return;
+            }
+
+            // Si no hay solicitud de imagen, genera una respuesta normal basada en el historial
+            const responsePrompt = `${basePrompt}\n${formattedHistory}\nModelo:`;
             const responseResult = await model.generateContent(responsePrompt);
             const aiResponse = responseResult.response.text().trim();
 
