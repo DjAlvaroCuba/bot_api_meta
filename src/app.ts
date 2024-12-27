@@ -11,7 +11,7 @@ const PORT = process.env.PORT ?? 3008;
 // Inicialización de GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
+//imagenes de Paul Muller 
 const images = [
     { keyword: "instituto", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
     { keyword: "cursos", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
@@ -80,7 +80,7 @@ const ingresoflow = addKeyword("")
         try {
             // Captura el mensaje del usuario
             const userPrompt = ctx.body;
-
+            console.log(ctx)
             // Agrega el mensaje del usuario al historial
             chatHistory.push({ role: "user", text: userPrompt });
 
