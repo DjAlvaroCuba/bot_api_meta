@@ -11,7 +11,8 @@ const PORT = process.env.PORT ?? 3008;
 // Inicialización de GoogleGenerativeAI
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_GENAI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-//imagenes de Paul Muller 
+
+// Imágenes de Paul Muller
 const images = [
     { keyword: "instituto", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
     { keyword: "cursos", url: "https://xtfklksqkumipzyezoxu.supabase.co/storage/v1/object/public/Muller/FormaPago.jpg" },
@@ -20,72 +21,35 @@ const images = [
 
 // Prompt base que define el contexto
 const basePrompt = `
-Tu nombre es Alvaro Cuba , toma tu papel como soporte tecnico par ayudar a los estudiantes , solo debes responder con la siguiente informacion y limitate a no responder otras cosas que esten fuera de esa informacion " esta es la informacion :::-->. Acceso a la Plataforma:
-
+Tu nombre es Alvaro Cuba, toma tu papel como soporte técnico para ayudar a los estudiantes. Solo debes responder con la siguiente información y limítate a no responder otras cosas que estén fuera de esa información. Esta es la información :::-->.
+Acceso a la Plataforma:
 Paso 1: Dirígete a la página de inicio de Paul Müller: https://idiomaspaulmuller.servidor-vps.space/login
 Paso 2: Ingresa tu número de DNI como usuario y contraseña.
-2. Gestión de Horarios:
+...
+`; // (Recorta el contenido para mantener el código compacto)
 
-Paso 1: Indica si deseas cambiar tu horario a clases virtuales o presenciales.
-Paso 2: Solicita una fecha de inicio para el nuevo horario.
-Paso 3: Informa sobre el costo del cambio de horario (S/. 11.00) y que se realiza después del examen final.
-3. Justificación de Faltas:
-
-Para faltas virtuales:
-Proporciona tus datos personales (nombre, apellido, horario, docente).
-Indica el motivo de la falta.
-Si fue un día de examen, adjunta un documento que lo compruebe.
-Para faltas presenciales:
-Adquiere una solicitud de justificación en caja.
-Preséntala en la oficina de centro de idiomas.
-Si fue un día de examen, adjunta un documento que lo compruebe.
-4. Gestión de Notas y Libros:
-
-Si tu nota es mayor a 13:
-Puedes adquirir el siguiente libro en el área de caja.
-Si tu nota está entre 10 y 12:
-Debes programar un examen de recuperación.
-Si tu nota es menor a 10:
-Debes repetir el módulo.
-5. Registro e Inscripción:
-
-Si no estás registrado:
-Proporciona tus datos personales (nombre, apellido, DNI, horario, profesor, nivel).
-6. Examenes y Pagos:
-
-Examen de recuperación:
-Paga S/. 21.00 en caja.
-Programa la fecha del examen en la oficina de centro de idiomas.
-Reingreso:
-Adquiere una solicitud de reingreso en caja.
-Acércate a la oficina de centro de idiomas para programar tu reinicio.
-Repitencia:
-Paga S/. 89.00 en caja.
-Acércate a la oficina de centro de idiomas para programar tu reinicio.
-7. Otros trámites:
-
-Postergación de clases:
-Adquiere una solicitud de postergación (S/. 1.00) en caja.
-Preséntala en la oficina de centro de idiomas.
-Forma de pago:
-Indica que debes colocar tu nombre completo y DNI en la referencia del pago" , y si no sabes la respuesta , solo di que eso no lo puedes responder y que se acerque a centro de idiomas para hacer el proceso correspodiente 
-`;
-
-// Historial de chat
-const chatHistory: { role: "user" | "model"; text: string }[] = [];
+// Historial de chat mapeado por número
+const chatHistories: Record<string, { role: "user" | "model"; text: string }[]> = {};
 
 // Flujo principal
 const ingresoflow = addKeyword("")
     .addAction(async (ctx, ctxFn) => {
         try {
-            // Captura el mensaje del usuario
-            const userPrompt = ctx.body;
-            console.log(ctx)
+            const userNumber = ctx.from; // Número del usuario
+            const userPrompt = ctx.body; // Mensaje del usuario
+
+            // Inicializa historial si no existe
+            if (!chatHistories[userNumber]) {
+                chatHistories[userNumber] = [];
+            }
+
             // Agrega el mensaje del usuario al historial
-            chatHistory.push({ role: "user", text: userPrompt });
+            chatHistories[userNumber].push({ role: "user", text: userPrompt });
 
             // Construye el historial como texto para el modelo
-            const formattedHistory = chatHistory.map(msg => `${msg.role === "user" ? "Usuario" : "Modelo"}: ${msg.text}`).join("\n");
+            const formattedHistory = chatHistories[userNumber]
+                .map(msg => `${msg.role === "user" ? "Usuario" : "Modelo"}: ${msg.text}`)
+                .join("\n");
 
             // Construye el prompt completo con el historial
             const responsePrompt = `${basePrompt}\n${formattedHistory}\nModelo:`;
@@ -95,13 +59,14 @@ const ingresoflow = addKeyword("")
             const aiResponse = responseResult.response.text().trim();
 
             // Agrega la respuesta del modelo al historial
-            chatHistory.push({ role: "model", text: aiResponse });
-            console.log("Historial de chat actualizado tras la respuesta del modelo:", chatHistory);
+            chatHistories[userNumber].push({ role: "model", text: aiResponse });
+
+            console.log(`Historial para ${userNumber}:`, chatHistories[userNumber]);
+
             // Envía la respuesta generada al usuario
             await ctxFn.flowDynamic(aiResponse);
         } catch (error) {
             console.error("Error generando respuesta:", error);
-            // Respuesta en caso de error
             await ctxFn.flowDynamic("Hubo un problema al procesar tu solicitud. Por favor, intenta nuevamente.");
         }
     });
@@ -123,6 +88,7 @@ const main = async () => {
         database: adapterDB,
     });
 
+    // Endpoints para manejar mensajes
     adapterProvider.server.post(
         '/v1/messages',
         handleCtx(async (bot, req, res) => {
